@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="/stylesheets/style.css">
   <script src="/scripts/freet.js"></script>
   <script src="/scripts/user.js"></script>
+  <script src="/scripts/bookmark.js"></script>
   <script src="/scripts/index.js"></script>
 </head>
 
@@ -117,6 +118,38 @@
           </div>
           <input type="submit" value="Delete Freet">
         </form>
+
+        <form id="view-all-bookmarks">
+          <h3>View All Bookmarks</h3>
+          <input type="submit" value="View All Bookmarks">
+        </form>
+
+      <form id="view-bookmarks-by-username">
+        <h3>View Bookmarks By Username</h3>
+        <div>
+          <label for="username">Username:</label>
+          <input id="username" name="username">
+        </div>
+        <input type="submit" value="View Bookmarks By Username">
+      </form>
+
+      <form id="create-bookmark">
+        <h3>Create Bookmark</h3>
+        <div>
+          <label for="freetId">freetId:</label>
+          <input id="freetId" name="freetId">
+        </div>
+        <input type="submit" value="Create Bookmark">
+      </form>
+
+      <form id="delete-bookmark">
+        <h3>Delete Bookmark</h3>
+        <div>
+          <label for="id">ID:</label>
+          <input id="id" name="id">
+        </div>
+        <input type="submit" value="Delete Bookmark">
+      </form>
       </div>
     </section>
     <section>
