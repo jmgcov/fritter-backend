@@ -1,6 +1,6 @@
 import type {HydratedDocument} from 'mongoose';
 import moment from 'moment';
-import type {Bookmark, PopulatedBookmark} from '../bookmark/model';
+import type {Bookmark} from '../bookmark/model';
 
 // Update this if you add a property to the Freet type!
 type BookmarkResponse = {

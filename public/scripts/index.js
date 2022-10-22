@@ -42,7 +42,12 @@ const formsAndHandlers = {
   'view-all-bookmarks': viewAllBookmarks,
   'view-bookmarks-by-username': viewBookmarksByUser,
   'create-bookmark': createBookmark,
-  'delete-bookmark': deleteBookmark
+  'delete-bookmark': deleteBookmark,
+  'view-all-likes': viewAllLikes,
+  'view-likes-by-username': viewLikesByUser,
+  'create-like': createLike,
+  'delete-like': deleteLike,
+  'view-like-count': viewLikesByLikeId
 };
 
 // Attach handlers to forms

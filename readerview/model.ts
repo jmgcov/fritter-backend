@@ -1,10 +1,10 @@
 import type {Types, PopulatedDoc, Document, TypeExpressionOperator} from 'mongoose';
 import {Schema, model} from 'mongoose';
 import type {User} from '../user/model';
-import type {Freet} from '../freet/model';
+// import type {Freet} from '../freet/model';
 
 /**
- * This file defines the properties stored in a Bookmark
+ * This file defines each user's status with respect to Reader View
  * DO NOT implement operations here ---> use collection file
  */
 
@@ -13,6 +13,12 @@ export type Bookmark = {
   _id: Types.ObjectId; // MongoDB assigns each object this ID on creation
   user: Types.ObjectId; // The user making the bookmarks
   freet: Types.ObjectId; // The freet being bookmarked
+};
+
+export type PopulatedBookmark = {
+  _id: Types.ObjectId; // MongoDB assigns each object this ID on creation
+  user: User; // The user making the bookmarks
+  freet: Freet; // The freet being bookmarked
 };
 
 // Mongoose schema definition for interfacing with a MongoDB table
@@ -31,9 +37,6 @@ const BookmarkSchema = new Schema<Bookmark>({
     required: true
   }
 });
-
-// ADD THIS TO CHECK FOR DUPLICATES
-BookmarkSchema.index({user: 1, freet: 1}, {unique: true});
 
 const BookmarkModel = model<Bookmark>('Bookmark', BookmarkSchema);
 export default BookmarkModel;
