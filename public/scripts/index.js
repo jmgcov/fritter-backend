@@ -47,7 +47,7 @@ const formsAndHandlers = {
   'view-likes-by-username': viewLikesByUser,
   'create-like': createLike,
   'delete-like': deleteLike,
-  'view-like-count': viewLikesByLikeId
+  'view-like-count-by-freet-id': viewLikesByFreetId
 };
 
 // Attach handlers to forms

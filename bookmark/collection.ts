@@ -55,8 +55,8 @@ class BookmarkCollection {
    * @return {Promise<HydratedDocument<Bookmark>[]>} - An array of all of the bookmarks
    */
   static async findAllByUsername(username: string): Promise<Array<HydratedDocument<Bookmark>>> {
-    const author = await UserCollection.findOneByUsername(username);
-    return BookmarkModel.find({authorId: author._id});
+    const owner = await UserCollection.findOneByUsername(username);
+    return BookmarkModel.find({user: owner._id});
   }
 
   /**

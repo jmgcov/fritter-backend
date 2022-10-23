@@ -30,8 +30,14 @@ function deleteLike(fields) {
     .catch(showResponse);
 }
 
-function viewLikesByLikeId(fields) {
-  fetch(`/api/like/count/${fields.id}`, {method: 'GET'})
+function viewLikesByFreetId(fields) {
+  fetch(`/api/like/count?freetId=${fields.freetId}`)
     .then(showResponse)
     .catch(showResponse);
 }
+
+// function viewLikesByFreetId(fields) {
+//   fetch(`/api/like?freetId=${fields.freetId}`)
+//     .then(showResponse)
+//     .catch(showResponse);
+// }

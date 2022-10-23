@@ -2,6 +2,7 @@ import type {NextFunction, Request, Response} from 'express';
 import express from 'express';
 import BookmarkCollection from './collection';
 import * as userValidator from '../user/middleware';
+import * as freetValidator from '../freet/middleware';
 import * as bookmarkValidator from '../bookmark/middleware';
 import * as util from './util';
 
@@ -37,10 +38,11 @@ router.get(
     const response = allBookmarks.map(util.constructBookmarkResponse); // IMPLEMENT
     res.status(200).json(response);
   },
-  // [
-  //   userValidator.isAuthorExists
-  // ],
+  [
+    userValidator.isUserExists
+  ],
   async (req: Request, res: Response) => {
+    console.log("Made it here.")
     const userBookmarks = await BookmarkCollection.findAllByUsername(req.query.username as string);
     const response = userBookmarks.map(util.constructBookmarkResponse);
     res.status(200).json(response);
@@ -56,11 +58,14 @@ router.get(
  * @return {BookmarkResponse} - The created bookmark
  * @throws {403} - If the user is not logged in
  * @throws {409} - If bookmark is a duplicate or otherwise cannot be created
+ * @throws {400} - If freetId is not given
+ * @throws {404} - If no freet has given freetId
  */
 router.post(
   '/',
   [
-    userValidator.isUserLoggedIn
+    userValidator.isUserLoggedIn,
+    freetValidator.isFreetExistsBodyVersion
   ],
   async (req: Request, res: Response) => {
     const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn

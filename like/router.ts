@@ -2,24 +2,25 @@ import type {NextFunction, Request, Response} from 'express';
 import express from 'express';
 import LikeCollection from './collection';
 import * as userValidator from '../user/middleware';
-import * as LikeValidator from '../Like/middleware';
+import * as likeValidator from '../like/middleware';
+import * as freetValidator from '../freet/middleware';
 import * as util from './util';
 
 const router = express.Router();
 
 /**
- * Get all the Likes
+ * Get all the likes
  *
- * @name GET /api/Like
+ * @name GET /api/like
  *
- * @return {LikeResponse[]} - A list of all the Likes
+ * @return {LikeResponse[]} - A list of all the likes
  */
 /**
- * Get Likes by user.
+ * Get likes by user.
  *
- * @name GET /api/Like?username=username
+ * @name GET /api/like?username=username
  *
- * @return {LikeResponse[]} - An array of Likes created by user with id, userId
+ * @return {LikeResponse[]} - An array of likes created by user with id, userId
  * @throws {400} - If userId is not given
  * @throws {404} - If no user has given userId
  *
@@ -34,12 +35,12 @@ router.get(
     }
 
     const allLikes = await LikeCollection.findAll();
-    const response = allLikes.map(util.constructLikeResponse); // IMPLEMENT
+    const response = allLikes.map(util.constructLikeResponse);
     res.status(200).json(response);
   },
-  // [
-  //   userValidator.isAuthorExists // NEED A DIFFERENT KIND OF VALIDATION HERE?
-  // ],
+  [
+    userValidator.isUserExists
+  ],
   async (req: Request, res: Response) => {
     const userLikes = await LikeCollection.findAllByUsername(req.query.username as string);
     const response = userLikes.map(util.constructLikeResponse);
@@ -48,83 +49,84 @@ router.get(
 );
 
 /**
- * Create a new Like.
+ * Create a new like.
  *
- * @name POST /api/Like/
+ * @name POST /api/like/
  *
- * @param {string} freetId - The freet to Like
- * @return {LikeResponse} - The created Like
+ * @param {string} freetId - The freet to like
+ * @return {LikeResponse} - The created like
  * @throws {403} - If the user is not logged in
- * @throws {409} - If Like is a duplicate or otherwise cannot be created
+ * @throws {409} - If like is a duplicate or otherwise cannot be created
+ * @throws {400} - If freetId is not given
+ * @throws {404} - If no freet has given freetId
  */
 router.post(
   '/',
   [
-    userValidator.isUserLoggedIn
+    userValidator.isUserLoggedIn,
+    freetValidator.isFreetExistsBodyVersion
   ],
   async (req: Request, res: Response) => {
     const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
     try {
-      const Like = await LikeCollection.addOne(userId, req.body.freetId);
+      const like = await LikeCollection.addOne(userId, req.body.freetId);
 
       res.status(201).json({
-        message: 'Your Like was created successfully.',
-        Like: util.constructLikeResponse(Like) // IMPLEMENT
+        message: 'Your like was created successfully.',
+        like: util.constructLikeResponse(like)
       });
     } catch {
       res.status(409).json({
-        message: 'Your Like was a duplicate or otherwise could not be created.' // TODO - ASK RE MOVING TO MIDDLEWARE
+        message: 'Your like was a duplicate or otherwise could not be created.' // TODO - ASK RE MOVING TO MIDDLEWARE
       });
     }
   }
 );
 
 /**
- * Delete a Like
+ * Delete a like
  *
- * @name DELETE /api/Like/:id
+ * @name DELETE /api/like/:id
  *
  * @return {string} - A success message
- * @throws {403} - If the user is not logged in or is not the author of
- *                 the freet
- * @throws {404} - If the freetId is not valid
+ * @throws {403} - If the user is not logged in or is not the owner of
+ *                 the Like
+ * @throws {404} - If the likeId is not valid
  */
 router.delete(
   '/:likeId?',
   [
     userValidator.isUserLoggedIn,
-    LikeValidator.isLikeExists,
-    LikeValidator.isValidLikeModifier // NEED TO IMPLEMENT, AND ADD TO IMPORTS
+    likeValidator.isLikeExists,
+    likeValidator.isValidLikeModifier
   ],
   async (req: Request, res: Response) => {
     await LikeCollection.deleteOne(req.params.likeId);
     res.status(200).json({
-      message: 'Your Like was deleted successfully.'
+      message: 'Your like was deleted successfully.'
     });
   }
 );
 
-// TODO - ADD TO API ROUTES
 /**
- * Get the like count by likeId.
+ * Get the number of Likes for a freet by freetId.
  *
- * @name GET /api/Like/Count/:likeId?
+ * @name GET /api/like/count?freetId=freetId
  *
- * @return {number} - The number of likes for the like with likeId
- * @throws {400} - If likeId is not given
- * @throws {404} - If no like has given likeId
+ * @return {number} - The number of users that like the given freet
+ * @throws {400} - If freetId is not given
+ * @throws {404} - If no freet has given freetId
  *
  */
 router.get(
-  '/Count/:likeId?',
+  '/count',
   [
-    LikeValidator.isLikeExists
+    freetValidator.isFreetExistsQueryVersion
   ],
   async (req: Request, res: Response) => {
-    const count = await LikeCollection.countLikes(req.params.likeId);
-    res.status(200).json({
-      likeCount: count
-    });
+    const count = await LikeCollection.countLikes(req.query.freetId as string);
+    const response = {likeCount: count};
+    res.status(200).json(response);
   }
 );
 
