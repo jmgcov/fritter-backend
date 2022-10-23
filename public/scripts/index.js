@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+
 // Show an object on the screen.
 function showObject(obj) {
   const pre = document.getElementById('response');
@@ -47,7 +50,11 @@ const formsAndHandlers = {
   'view-likes-by-username': viewLikesByUser,
   'create-like': createLike,
   'delete-like': deleteLike,
-  'view-like-count-by-freet-id': viewLikesByFreetId
+  'view-like-count-by-freet-id': viewLikesByFreetId,
+  'view-all-events': viewAllEvents,
+  'view-events-by-author': viewEventsByAuthor,
+  'create-event': createEvent,
+  'cancel-event': cancelEvent
 };
 
 // Attach handlers to forms

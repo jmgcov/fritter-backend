@@ -9,6 +9,7 @@
   <script src="/scripts/user.js"></script>
   <script src="/scripts/bookmark.js"></script>
   <script src="/scripts/like.js"></script>
+  <script src="/scripts/event.js"></script>
   <script src="/scripts/index.js"></script>
 </head>
 
@@ -118,6 +119,51 @@
           </div>
           <input type="submit" value="Delete Freet">
         </form>
+
+        <form id="view-all-events">
+          <h3>View All Event Announcements</h3>
+          <input type="submit" value="View All Event Announcements">
+        </form>
+
+      <form id="view-events-by-author">
+        <h3>View Event Announcements By Author</h3>
+        <div>
+          <label for="author">Author:</label>
+          <input id="author" name="author">
+        </div>
+        <input type="submit" value="View Event Announcements By Author">
+      </form>
+
+      <form id="create-event">
+        <h3>Create Event Announcement</h3>
+        <div>
+          <label for="eventDate">Event Date:</label>
+          <input type="datetime-local" id="eventDate"
+            name="eventDate">
+        </div>
+        <div>
+          <label for="eventSubject">Event Subject:</label>
+          <textarea id="eventSubject" name="eventSubject"></textarea>
+        </div>
+        <div>
+          <label for="eventLocation">Event Location:</label>
+          <textarea id="eventLocation" name="eventLocation"></textarea>
+        </div>
+        <div>
+          <label for="eventDescription">Event Description:</label>
+          <textarea id="eventDescription" name="eventDescription"></textarea>
+        </div>
+        <input type="submit" value="Create Event">
+      </form>
+
+      <form id="cancel-event">
+        <h3>Cancel Event</h3>
+        <div>
+          <label for="id">ID:</label>
+          <input id="id" name="id">
+        </div>
+        <input type="submit" value="Cancel Event">
+      </form>
 
         <form id="view-all-bookmarks">
           <h3>View All Bookmarks</h3>
