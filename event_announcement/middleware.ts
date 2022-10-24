@@ -167,11 +167,29 @@ const isValidEventModifier = async (req: Request, res: Response, next: NextFunct
   next();
 };
 
+/**
+ * Checks if a given freetId is associated with an Event Announcement.  For example, used to prevent
+ * the freet associated with an event from being deleted or modified independently of the event
+ * itself.
+ */
+const isFreetAssociatedWithEvent = async (req: Request, res: Response, next: NextFunction) => {
+  const event = await EventCollection.findOneByFreetId(req.params.freetId);
+  if (event) {
+    res.status(403).json({
+      error: 'Cannot delete or modify a freet that is associated with an event announcement independently of the event.'
+    });
+    return;
+  }
+
+  next();
+};
+
 export {
   isValidEventDescription,
   isValidEventDate,
   isValidEventSubject,
   isValidEventLocation,
   isEventExists,
-  isValidEventModifier
+  isValidEventModifier,
+  isFreetAssociatedWithEvent
 };

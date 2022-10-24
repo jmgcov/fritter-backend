@@ -9,9 +9,9 @@ import FreetCollection from '../freet/collection';
 /**
  * This files contains a class that has the functionality to explore event announcements
  * stored in MongoDB, including adding, finding, and CANCELLING event announcements.
- * 
+ *
  * NOTE: EVENT ANNOUNCEMENTS CANNOT BE MODIFIED OR DELETED ONCE CREATED, BUT ONLY "CANCELLED," FOR
- * REASONS EXPLAINED IN MY PRIOR ASSIGNMENTS.  
+ * REASONS EXPLAINED IN MY PRIOR ASSIGNMENTS.
  *
  * Note: HydratedDocument<Event> is the output of the EventModel() constructor,
  * and contains all the information in Event. https://mongoosejs.com/docs/typescript.html
@@ -53,6 +53,18 @@ class EventCollection {
    */
   static async findOne(eventId: Types.ObjectId | string): Promise<HydratedDocument<Event>> {
     return EventModel.findOne({_id: eventId});
+  }
+
+  /**
+   * Find an event by eventId by the freetId of the freet associated with the event, or null if the
+   * freetId is not associated with any event.
+   * 
+   *
+   * @param {string} eventId - The id of the event to find
+   * @return {Promise<HydratedDocument<Freet>> | Promise<null> } - The event with the given eventId, if any
+   */
+  static async findOneByFreetId(freetId: Types.ObjectId | string): Promise<HydratedDocument<Event>> {
+    return EventModel.findOne({associatedFreet: freetId});
   }
 
   /**
