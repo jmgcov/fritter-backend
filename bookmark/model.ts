@@ -1,7 +1,5 @@
 import type {Types, PopulatedDoc, Document, TypeExpressionOperator} from 'mongoose';
 import {Schema, model} from 'mongoose';
-import type {User} from '../user/model';
-import type {Freet} from '../freet/model';
 
 /**
  * This file defines the properties stored in a Bookmark

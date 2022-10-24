@@ -56,9 +56,8 @@ class EventCollection {
   }
 
   /**
-   * Find an event by eventId by the freetId of the freet associated with the event, or null if the
+   * Find an event by the freetId of the freet associated with the event, or null if the
    * freetId is not associated with any event.
-   * 
    *
    * @param {string} eventId - The id of the event to find
    * @return {Promise<HydratedDocument<Freet>> | Promise<null> } - The event with the given eventId, if any

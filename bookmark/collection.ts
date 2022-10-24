@@ -78,6 +78,15 @@ class BookmarkCollection {
   static async deleteMany(user: Types.ObjectId | string): Promise<void> {
     await BookmarkModel.deleteMany({user});
   }
+
+  /**
+   * Delete all the bookmarks associated to a given freet
+   *
+   * @param {string} freet - The freetId of the subject freet
+   */
+  static async deleteManyByFreetId(freet: Types.ObjectId | string): Promise<void> {
+    await BookmarkModel.deleteMany({freet});
+  }
 }
 
 export default BookmarkCollection;

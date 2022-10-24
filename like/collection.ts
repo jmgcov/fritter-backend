@@ -80,6 +80,15 @@ class LikeCollection {
   }
 
   /**
+   * Delete all the likes associated to a given freet
+   *
+   * @param {string} freet - The freetId of the subject freet
+   */
+  static async deleteManyByFreetId(freet: Types.ObjectId | string): Promise<void> {
+    await LikeModel.deleteMany({freet});
+  }
+
+  /**
    * Count all the Likes for a particular freet
    *
    * @param {string} freetId - The freetId of the freet

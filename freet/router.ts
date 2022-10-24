@@ -1,6 +1,8 @@
 import type {NextFunction, Request, Response} from 'express';
 import express from 'express';
 import FreetCollection from './collection';
+import BookmarkCollection from '../bookmark/collection';
+import LikeCollection from '../like/collection';
 import * as userValidator from '../user/middleware';
 import * as freetValidator from '../freet/middleware';
 import * as eventValidator from '../event_announcement/middleware';
@@ -86,8 +88,8 @@ router.post(
  *
  * @return {string} - A success message
  * @throws {403} - If the user is not logged in or is not the author of
- *                 the freet, or the freetId is associated with an event and is not
- * an independent freet that can be modified or deleted separately, or if the user is in reader mode
+ * the freet, or the freetId is associated with an event and is not an independent freet that can
+ * be modified or deleted separately, or if the user is in reader mode
  * @throws {404} - If the freetId is not valid
  */
 router.delete(
@@ -101,6 +103,11 @@ router.delete(
   ],
   async (req: Request, res: Response) => {
     await FreetCollection.deleteOne(req.params.freetId);
+
+    // SYNCS - DELETING A FREET ALSO DELETES THE LIKES AND BOOKMARKS ASSOCIATED WITH THAT FREET
+    await BookmarkCollection.deleteManyByFreetId(req.params.freetId);
+    await LikeCollection.deleteManyByFreetId(req.params.freetId);
+
     res.status(200).json({
       message: 'Your freet was deleted successfully.'
     });
