@@ -2,8 +2,10 @@ import type {Request, Response} from 'express';
 import express from 'express';
 import FreetCollection from '../freet/collection';
 import UserCollection from './collection';
+import ReaderModeCollection from '../readerMode/collection';
 import * as userValidator from '../user/middleware';
 import * as util from './util';
+
 
 const router = express.Router();
 
@@ -87,6 +89,11 @@ router.post(
   async (req: Request, res: Response) => {
     const user = await UserCollection.addOne(req.body.username, req.body.password);
     req.session.userId = user._id.toString();
+
+    // SYNC - when creating a new user, also create a ReaderMode associated with that user,
+    // initialized to false
+    await ReaderModeCollection.addOne(req.session.userId);
+
     res.status(201).json({
       message: `Your account was created successfully. You have been logged in as ${user.username}`,
       user: util.constructUserResponse(user)
@@ -140,6 +147,7 @@ router.delete(
   async (req: Request, res: Response) => {
     const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
     await UserCollection.deleteOne(userId);
+    // TODO - ADD REMAINING SYNCS ON USER DELETION
     await FreetCollection.deleteMany(userId);
     req.session.userId = undefined;
     res.status(200).json({

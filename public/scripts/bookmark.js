@@ -18,7 +18,6 @@ function viewBookmarksByUser(fields) {
 }
 
 function createBookmark(fields) {
-  console.log('fields', fields);
   fetch('/api/bookmark', {method: 'POST', body: JSON.stringify(fields), headers: {'Content-Type': 'application/json'}})
     .then(showResponse)
     .catch(showResponse);

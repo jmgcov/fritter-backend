@@ -175,6 +175,25 @@ const isUserExists = async (req: Request, res: Response, next: NextFunction) => 
   next();
 };
 
+// TODO - DELETE IF NOT NEEDED
+// /**
+//  * Checks if a bookmark with bookmarkId is req.params exists
+//  */
+// const isUserExists_paramsVersion = async (req: Request, res: Response, next: NextFunction) => {
+//   const validFormat = Types.ObjectId.isValid(req.params.userId);
+//   const user = validFormat ? await UserCollection.findOneByUserId(req.params.userId) : '';
+//   if (!user) {
+//     res.status(404).json({
+//       error: {
+//         userNotFound: `User with user ID ${req.params.userId} does not exist.`
+//       }
+//     });
+//     return;
+//   }
+
+//   next();
+// };
+
 export {
   isCurrentSessionUserExists,
   isUserLoggedIn,
@@ -185,4 +204,6 @@ export {
   isValidUsername,
   isValidPassword,
   isUserExists
+  // TODO - DELETE IF NOT NEEDED
+  // isUserExists_paramsVersion
 };

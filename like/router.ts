@@ -4,6 +4,7 @@ import LikeCollection from './collection';
 import * as userValidator from '../user/middleware';
 import * as likeValidator from '../like/middleware';
 import * as freetValidator from '../freet/middleware';
+import * as readerModeValidator from '../readerMode/middleware';
 import * as util from './util';
 
 const router = express.Router();
@@ -55,7 +56,7 @@ router.get(
  *
  * @param {string} freetId - The freet to like
  * @return {LikeResponse} - The created like
- * @throws {403} - If the user is not logged in
+ * @throws {403} - If the user is not logged in, or in reader mode
  * @throws {409} - If like is a duplicate or otherwise cannot be created
  * @throws {400} - If freetId is not given
  * @throws {404} - If no freet has given freetId
@@ -64,7 +65,8 @@ router.post(
   '/',
   [
     userValidator.isUserLoggedIn,
-    freetValidator.isFreetExistsBodyVersion
+    freetValidator.isFreetExistsBodyVersion,
+    readerModeValidator.isInReaderMode
   ],
   async (req: Request, res: Response) => {
     const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
@@ -90,7 +92,7 @@ router.post(
  *
  * @return {string} - A success message
  * @throws {403} - If the user is not logged in or is not the owner of
- *                 the Like
+ *                 the Like, or is in reader mode
  * @throws {404} - If the likeId is not valid
  */
 router.delete(
@@ -98,7 +100,8 @@ router.delete(
   [
     userValidator.isUserLoggedIn,
     likeValidator.isLikeExists,
-    likeValidator.isValidLikeModifier
+    likeValidator.isValidLikeModifier,
+    readerModeValidator.isInReaderMode
   ],
   async (req: Request, res: Response) => {
     await LikeCollection.deleteOne(req.params.likeId);

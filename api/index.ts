@@ -14,6 +14,7 @@ import {freetRouter} from '../freet/router';
 import {bookmarkRouter} from '../bookmark/router';
 import {likeRouter} from '../like/router';
 import {eventRouter} from '../event_announcement/router';
+import {readerModeRouter} from '../readerMode/router';
 
 // Load environmental variables
 dotenv.config({});
@@ -82,6 +83,7 @@ app.use('/api/freets', freetRouter);
 app.use('/api/bookmark', bookmarkRouter);
 app.use('/api/like', likeRouter);
 app.use('/api/events', eventRouter);
+app.use('/api/readerMode', readerModeRouter);
 
 // Catch all the other routes and display error message
 app.all('*', (req: Request, res: Response) => {

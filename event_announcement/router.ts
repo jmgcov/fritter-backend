@@ -3,6 +3,7 @@ import express from 'express';
 import EventCollection from './collection';
 import * as userValidator from '../user/middleware';
 import * as eventValidator from '../event_announcement/middleware';
+import * as readerModeValidator from '../readerMode/middleware';
 import * as util from './util';
 
 const router = express.Router();
@@ -58,7 +59,7 @@ router.get(
  * @param {string} eventLocation - The location for the event
  * @param {string} eventDescription - The description of the event
  * @return {EventResponse} - The created event
- * @throws {403} - If the user is not logged in
+ * @throws {403} - If the user is not logged in, or is in readerMode
  * @throws {400} - If the event content, or event subject, event location or event date is empty or a stream of empty spaces
  * @throws {413} - If the event content is more than 140 characters long, or the event subject is
  * more than 70 characters long, or the event date is in the past, or the event location is more than 
@@ -69,9 +70,10 @@ router.post(
   [
     userValidator.isUserLoggedIn,
     eventValidator.isValidEventDescription,
-    eventValidator.isValidEventDate, // TODO - implement
-    eventValidator.isValidEventSubject, // TODO - implement
-    eventValidator.isValidEventLocation
+    eventValidator.isValidEventDate,
+    eventValidator.isValidEventSubject,
+    eventValidator.isValidEventLocation,
+    readerModeValidator.isInReaderMode
   ],
   async (req: Request, res: Response) => {
     const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
@@ -92,7 +94,7 @@ router.post(
  *
  * @return {EventResponse} - the updated event, now cancelled
  * @throws {403} - if the user is not logged in or not the author of
- *                 of the event
+ *                 of the event, or reader mode is enabled
  * @throws {404} - If the eventId is not valid
  */
 router.put(
@@ -100,7 +102,8 @@ router.put(
   [
     userValidator.isUserLoggedIn,
     eventValidator.isEventExists,
-    eventValidator.isValidEventModifier
+    eventValidator.isValidEventModifier,
+    readerModeValidator.isInReaderMode
   ],
   async (req: Request, res: Response) => {
     const event = await EventCollection.cancelOne(req.params.eventId);

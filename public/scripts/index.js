@@ -54,7 +54,9 @@ const formsAndHandlers = {
   'view-all-events': viewAllEvents,
   'view-events-by-author': viewEventsByAuthor,
   'create-event': createEvent,
-  'cancel-event': cancelEvent
+  'cancel-event': cancelEvent,
+  'enter-reader-mode': enterReaderMode,
+  'exit-reader-mode': exitReaderMode
 };
 
 // Attach handlers to forms
