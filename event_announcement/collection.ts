@@ -116,6 +116,15 @@ class EventCollection {
       await this.cancelOne(individualEvent._id);
     }
   }
+
+  /**
+   * Delete all the events by the given user
+   *
+   * @param {string} authorId - The id of the author of the events
+   */
+  static async deleteMany(authorId: Types.ObjectId | string): Promise<void> {
+    await EventModel.deleteMany({authorId});
+  }
 }
 
 export default EventCollection;

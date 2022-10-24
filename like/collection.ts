@@ -73,10 +73,10 @@ class LikeCollection {
   /**
    * Delete all the likes by the given user
    *
-   * @param {string} userId - The id of user of likes
+   * @param {string} user - The id of user of likes
    */
-  static async deleteMany(userId: Types.ObjectId | string): Promise<void> {
-    await LikeModel.deleteMany({userId});
+  static async deleteMany(user: Types.ObjectId | string): Promise<void> {
+    await LikeModel.deleteMany({user});
   }
 
   /**

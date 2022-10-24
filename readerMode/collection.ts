@@ -68,10 +68,10 @@ class ReaderModeCollection {
    * Delete all ReaderModes by the given user (there should only be 1), for use only when deleting a
    * user from the database.
    *
-   * @param {string} userId - The id of user
+   * @param {string} user - The id of user
    */
-  static async deleteMany(userId: Types.ObjectId | string): Promise<void> {
-    await ReaderModeModel.deleteMany({user: userId});
+  static async deleteMany(user: Types.ObjectId | string): Promise<void> {
+    await ReaderModeModel.deleteMany({user});
   }
 }
 

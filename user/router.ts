@@ -2,10 +2,12 @@ import type {Request, Response} from 'express';
 import express from 'express';
 import FreetCollection from '../freet/collection';
 import UserCollection from './collection';
-import ReaderModeCollection from '../readerMode/collection';
 import * as userValidator from '../user/middleware';
 import * as util from './util';
-
+import BookmarkCollection from '../bookmark/collection';
+import EventCollection from '../event_announcement/collection';
+import LikeCollection from '../like/collection';
+import ReaderModeCollection from '../readerMode/collection';
 
 const router = express.Router();
 
@@ -147,8 +149,14 @@ router.delete(
   async (req: Request, res: Response) => {
     const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
     await UserCollection.deleteOne(userId);
-    // TODO - ADD REMAINING SYNCS ON USER DELETION
+
+    // SYNCS - DELETING A USER DELETES ALL OF THEIR ASSOCIATED CONTENT
     await FreetCollection.deleteMany(userId);
+    await BookmarkCollection.deleteMany(userId);
+    await EventCollection.deleteMany(userId);
+    await LikeCollection.deleteMany(userId);
+    await ReaderModeCollection.deleteMany(userId);
+
     req.session.userId = undefined;
     res.status(200).json({
       message: 'Your account has been deleted successfully.'

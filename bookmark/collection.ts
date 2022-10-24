@@ -73,10 +73,10 @@ class BookmarkCollection {
   /**
    * Delete all the bookmarks by the given user
    *
-   * @param {string} userId - The id of user of bookmarks
+   * @param {string} user - The user of bookmarks, by userId
    */
-  static async deleteMany(userId: Types.ObjectId | string): Promise<void> {
-    await BookmarkModel.deleteMany({userId});
+  static async deleteMany(user: Types.ObjectId | string): Promise<void> {
+    await BookmarkModel.deleteMany({user});
   }
 }
 
