@@ -25,8 +25,8 @@ const router = express.Router();
  * @name GET /api/freets?authorId=id
  *
  * @return {FreetResponse[]} - An array of freets created by user with id, authorId
- * @throws {400} - If authorId is not given
- * @throws {404} - If no user has given authorId
+ * @throws {400} - if authorname is not given
+ * @throws {404} - if no user has given authorname
  *
  */
 router.get(

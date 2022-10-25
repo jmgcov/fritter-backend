@@ -20,9 +20,9 @@ const router = express.Router();
  *
  * @name GET /api/bookmark?username=username
  *
- * @return {BookmarkResponse[]} - An array of bookmarks created by user with id, userId
- * @throws {400} - If userId is not given
- * @throws {404} - If no user has given userId
+ * @return {BookmarkResponse[]} - An array of bookmarks created by user with username
+ * @throws {400} - If username is not given
+ * @throws {404} - If no user has given username
  *
  */
 router.get(
@@ -42,7 +42,6 @@ router.get(
     userValidator.isUserExists
   ],
   async (req: Request, res: Response) => {
-    console.log("Made it here.")
     const userBookmarks = await BookmarkCollection.findAllByUsername(req.query.username as string);
     const response = userBookmarks.map(util.constructBookmarkResponse);
     res.status(200).json(response);
@@ -91,8 +90,8 @@ router.post(
  *
  * @return {string} - A success message
  * @throws {403} - If the user is not logged in or is not the author of
- *                 the freet
- * @throws {404} - If the freetId is not valid
+ *                 the bookmark
+ * @throws {404} - If the bookmarkId is not valid
  */
 router.delete(
   '/:bookmarkId?',

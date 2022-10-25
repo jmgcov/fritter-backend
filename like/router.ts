@@ -22,8 +22,8 @@ const router = express.Router();
  * @name GET /api/like?username=username
  *
  * @return {LikeResponse[]} - An array of likes created by user with id, userId
- * @throws {400} - If userId is not given
- * @throws {404} - If no user has given userId
+ * @throws {400} - if `username` is not given
+ * @throws {404} - if `username` is not a recognized username of any user
  *
  */
 router.get(

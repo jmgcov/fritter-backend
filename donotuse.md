@@ -181,16 +181,16 @@ This renders the `index.html` file that will be used to interact with the backen
 
 - An array of all freets sorted in descending order by date modified
 
-#### `GET /api/freets?authorId=id` - Get freets by author
+#### `GET /api/freets?author=USERNAME` - Get freets by author
 
 **Returns**
 
-- An array of freets created by user with id `authorId`
+- An array of freets created by user with username `author`
 
 **Throws**
 
-- `400` if authorname is not given
-- `404` if no user has given authorname
+- `400` if `author` is not given
+- `404` if `author` is not a recognized username of any user
 
 #### `POST /api/freets` - Create a new freet
 
@@ -205,7 +205,7 @@ This renders the `index.html` file that will be used to interact with the backen
 
 **Throws**
 
-- `403` if the user is not logged in, or in reader mode
+- `403` if the user is not logged in
 - `400` If the freet content is empty or a stream of empty spaces
 - `413` If the freet content is more than 140 characters long
 
@@ -217,7 +217,8 @@ This renders the `index.html` file that will be used to interact with the backen
 
 **Throws**
 
-- `403` if the user is not logged in or is not the author of the freet, or the freetId is associated with an event and is not an independent freet that can be modified or deleted separately, or if the user is in reader mode
+- `403` if the user is not logged in
+- `403` if the user is not the author of the freet
 - `404` if the freetId is invalid
 
 #### `PUT /api/freets/:freetId?` - Update an existing freet
@@ -233,8 +234,9 @@ This renders the `index.html` file that will be used to interact with the backen
 
 **Throws**
 
-- `403` if the user is not logged in or is not the author of the freet, or the freetId is associated with an event and is not an independent freet that can be modified or deleted separately, or if the user is in reader mode
+- `403` if the user is not logged in
 - `404` if the freetId is invalid
+- `403` if the user is not the author of the freet
 - `400` if the new freet content is empty or a stream of empty spaces
 - `413` if the new freet content is more than 140 characters long
 
@@ -312,6 +314,10 @@ This renders the `index.html` file that will be used to interact with the backen
 
 - `403` if the user is not logged in
 
+## New API routes added by me
+
+### /api/bookmark
+
 #### `GET /api/bookmark` - Get all the bookmarks
 
 **Returns**
@@ -343,9 +349,7 @@ This renders the `index.html` file that will be used to interact with the backen
 **Throws**
 
 - `403` if the user is not logged in
-- `409` if bookmark is a duplicate or otherwise cannot be created
-- `400` if freetId is not given
-- `404` if no freet has given freetId
+- `404` If the freetId is empty or invalid // COME BACK TO THIS
 
 #### `DELETE /api/bookmark/:bookmarkId?` - Delete an existing bookmark
 
@@ -358,6 +362,8 @@ This renders the `index.html` file that will be used to interact with the backen
 - `403` if the user is not logged in
 - `403` if the user is not the owner of the bookmark
 - `404` if the bookmarkId is invalid
+
+### /api/like
 
 #### `GET /api/like` - Get all the likes
 
@@ -389,10 +395,8 @@ This renders the `index.html` file that will be used to interact with the backen
 
 **Throws**
 
-- `403` if the user is not logged in, or in reader mode
-- `409` if like is a duplicate or otherwise cannot be created
-- `400` if freetId is not given
-- `404` if no freet has given freetId
+- `403` if the user is not logged in
+- `404` If the freetId is empty or invalid // COME BACK TO THIS
 
 #### `DELETE /api/like/:likeId?` - Delete an existing like
 
@@ -404,10 +408,9 @@ This renders the `index.html` file that will be used to interact with the backen
 
 - `403` if the user is not logged in
 - `403` if the user is not the owner of the like
-- `403` if the uder is in reader mode
 - `404` if the likeId is invalid
 
-#### `GET /api/like/count?freetId=freetId` - Get the number of users who have liked a freet with the given ID
+#### `GET /api/like/likecount?freetId=FREETID` - Get the number of users who have liked a freet with the given ID
 
 **Returns**
 
@@ -418,7 +421,19 @@ This renders the `index.html` file that will be used to interact with the backen
 - `400` if `freetId` is not given
 - `404` if `freetId` is not a recognized freetId of any freet in the collection
 
-#### `PUT /api/readerMode/enter` - Enters Reader Mode for the user in the current session. NOTE: IDEMPOTENT (after entering, entering again makes no additional changes)
+### /api/readerview
+
+#### `GET /api/readerview` - Get all the users currently in readerview
+
+**Returns**
+
+- An array of all users who are set to readerview
+
+
+#### `POST /api/readerview` - Add a user to readerview
+**Body**
+
+- `userId` _{string}_ - The user to add to readerview
 
 **Returns**
 
@@ -426,9 +441,9 @@ This renders the `index.html` file that will be used to interact with the backen
 
 **Throws**
 
-- `403` if user is not logged in
+- `403` if the user is not logged in
 
-#### `PUT /api/readerMode/exit` - Exits Reader Mode for the user in the current session. NOTE: IDEMPOTENT (after entering, entering again makes no additional changes)
+#### `DELETE /api/bookmark/:userId?` - Remove user from readerview
 
 **Returns**
 
@@ -436,55 +451,66 @@ This renders the `index.html` file that will be used to interact with the backen
 
 **Throws**
 
-- `403` if user is not logged in
+- `403` if the user is not logged in
 
-#### `GET /api/events` - Get all the event announcements
+### /api/announcement
+
+#### `GET /api/announcement` - Get all the event announcements
 
 **Returns**
 
 - An array of all event announcements 
 
+#### `GET /api/announcement/active` - Get all the event announcements that have not been cancelled
+
+**Returns**
+
+- An array of all active (non-cancelled) event announcements 
+
+#### `GET /api/announcement/cancelled` - Get all the event announcements that have been cancelled
+
+**Returns**
+
+- An array of all cancelled event announcements 
+
 #### `GET /api/announcement?author=USERNAME` - Get announcements by author
 
 **Returns**
 
-- An array of event announcements created by user with username `author`
+- An array of announcements created by user with username `author`
 
 **Throws**
 
 - `400` if `author` is not given
 - `404` if `author` is not a recognized username of any user
 
-#### `POST /api/events` - Create a new event announcement
+#### `POST /api/announcement` - Create a new event announcement
 
 **Body**
 
-- `date` _{Date}_ - The date and time of the event 
-- `eventSubject` _{string}_ - The subject of the event
-- `eventLocation` _{string}_ - The location for the event
-- `eventDescription` _{string}_ - The description of the event
+- `date` Date - The date and time of the event // TYPESCRIPT DATE OBJECTS INCLUDE BOTH DATE AND TIME
+- `description` _{string}_ - The description of the event 
 
 **Returns**
 
 - A success message
-- A object with the created event
+- A object with the created announcement
 
 **Throws**
 
-- `403` if the user is not logged in, or in reader mode
-- `400` If the event content, or event subject, event location or event date is empty or a stream of empty spaces
-- `413` If the event content is more than 140 characters long, or the event subject is more than 70 characters long, or the event date is in the past, or the event location is more than 70 characters long
+- `403` if the user is not logged in
+- `400` If the announcement description is empty or a stream of empty spaces
+- `413` If the date is invalid or in the past
 
-#### `PUT /api/events/:id` - Cancel an existing event announcement
+#### `DELETE /api/freets/:announcementId?` - Cancel an existing event announcement
 
 **Returns**
 
 - A success message
-- An object representing the updated event, now showing that it is cancelled
 
 **Throws**
 
-- `403` if the user is not logged in, or the user is in reader mode
-- `403` if the user is not the author of the event announcement
-- `404` if the eventId is invalid
+- `403` if the user is not logged in
+- `403` if the user is not the author of the announcement
+- `404` if the announcementId is invalid
 

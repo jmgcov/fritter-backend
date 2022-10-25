@@ -20,17 +20,17 @@ const router = express.Router();
 /**
  * Get events by author.
  *
- * @name GET /api/events?authorId=id
+ * @name GET /api/events?author=author
  *
- * @return {FreetResponse[]} - An array of events created by user with id, authorId
- * @throws {400} - If authorId is not given
- * @throws {404} - If no user has given authorId
+ * @return {FreetResponse[]} - An array of events created by user with username
+ * @throws {400} - If username is not given
+ * @throws {404} - If no user has given username
  *
  */
 router.get(
   '/',
   async (req: Request, res: Response, next: NextFunction) => {
-    // Check if authorId query parameter was supplied
+    // Check if author query parameter was supplied
     if (req.query.author !== undefined) {
       next();
       return;
